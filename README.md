@@ -2,7 +2,7 @@
 ## Theme: 
 > You are your own enemy.
 ## Game Idea:
-> A game where you are running from your own shadow that copies your exact moves and timing. The shadow gets quicker as you progress through the game. The levels are infinitely long and randomized every game. Your score is dependent on how far you get from the starting position (vertically). 
+> A game where you must outrun your own shadow, which replicates your every move and timing. As you progress, the shadow speeds up, intensifying the challenge. The levels are infinitely long and randomly generated with each playthrough. Your score is based on how far you can move vertically from your starting position. 
 ## Authors:
 > Tanav Malhotra, Jawadul Jarif, & Bryan Lochan
 ## License:
