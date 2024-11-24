@@ -5,6 +5,7 @@ import os
 import random
 import time
 from collections import deque
+import asyncio
 
 ##### Initializing the Pygame Libraries #####
 pygame.init()
@@ -299,7 +300,7 @@ def show_game_over_screen(window, score, shadow_delay): # returns whether player
             if event.type == pygame.KEYDOWN:
                 return True
 
-def main():
+async def main():
     clock = pygame.time.Clock()
     run = True
 
@@ -433,7 +434,8 @@ def main():
 
     print(f"Final Score: {score}")
     print(f"Final Shadow Delay: {SHADOW_DELAY:.2f}")
+    await asyncio.sleep(0)
     pygame.quit()
 
 if __name__ == "__main__":
-    main()
+    asyncio.run(main())
