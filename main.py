@@ -9,10 +9,21 @@ from collections import deque
 import asyncio
 from button import Button
 from enum import Enum
-import logging
 
-##### SET LOG LEVEL #####
-logging.basicConfig(level=logging.ERROR)
+is_mac = sys.platform == "darwin"  # "darwin" is the system name for macOS
+
+if is_mac:
+    import objc
+    from Cocoa import NSApplication, NSObject
+
+    class AppDelegate(NSObject):
+        def applicationSupportsSecureRestorableState_(self, app):
+            return False  # Disable state restoration on macOS
+
+    # Create the application and delegate
+    app = NSApplication.sharedApplication()
+    delegate = AppDelegate.alloc().init()
+    app.setDelegate_(delegate)
 
 ##### Initializing the Pygame Libraries #####
 pygame.init()
@@ -319,20 +330,21 @@ def show_game_over_screen(window, score, shadow_delay): # returns whether player
     # Wait for player to quit
     waiting = True
     game_over_time = pygame.time.get_ticks()
+    print("Press 'q' to quit...")
     while waiting:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 return False
             if event.type == pygame.KEYDOWN and (pygame.time.get_ticks() - game_over_time >= 500):
-                if event.key in {pygame.K_ESCAPE, pygame.K_q}:
+                if event.key == pygame.K_q:
                     return False
                 return True
 
 def show_pause_menu(window):
     ### Display Pause Menu
-    print("Paused...")
     window.fill(BLACK)
     pygame.display.set_caption("Pause Menu")
+    print("Paused...")
     
     # Wait for player to quit
     waiting = True
@@ -356,10 +368,10 @@ def show_pause_menu(window):
             if event.type == pygame.QUIT:
                 return PauseMenuAction.QUIT
             if event.type == pygame.KEYDOWN:
-                if event.key in {pygame.K_ESCAPE, pygame.K_SPACE, pygame.K_RETURN}:
+                if event.key == pygame.K_ESCAPE:
                     print("Unpaused.")
                     return PauseMenuAction.RESUME
-                if event.key in {pygame.K_DELETE, pygame.K_BACKSPACE}:
+                if event.key in {pygame.K_DELETE, pygame.K_BACKSPACE, pygame.K_RETURN, pygame.K_KP_ENTER}:
                     print("Restarting...")
                     return PauseMenuAction.RESTART
                 if event.key == pygame.K_q:
