@@ -294,6 +294,7 @@ def show_game_over_screen(window, score, shadow_delay): # returns whether player
     
     # Wait for player to quit
     waiting = True
+    time.sleep(0.5)
     while waiting:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
