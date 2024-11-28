@@ -9,6 +9,10 @@ from collections import deque
 import asyncio
 from button import Button
 from enum import Enum
+import logging
+
+##### SET LOG LEVEL #####
+logging.basicConfig(level=logging.ERROR)
 
 ##### Initializing the Pygame Libraries #####
 pygame.init()
@@ -34,13 +38,13 @@ SHADOW_DELAY = SHADOW_DELAY_INIT # delay in seconds
 # BUTTONS
 COLORED_BUTTONS = True # change to False for white-on-black buttons
 if COLORED_BUTTONS:
-    RESUME_BUTTON = Button(WIDTH//2, 400, pygame.image.load(os.path.join("assets", "buttons", "resume_col_button.png")), 0.8)
-    RESTART_BUTTON = Button(WIDTH//2, 400, pygame.image.load(os.path.join("assets", "buttons", "restart_col_button.png")), 0.8)
-    QUIT_BUTTON = Button(WIDTH//2, 400, pygame.image.load(os.path.join("assets", "buttons", "quit_col_button.png")), 0.8)
+    RESUME_BUTTON = Button(WIDTH//2, HEIGHT//2, pygame.image.load(os.path.join("assets", "buttons", "resume_col_button.png")), 0.5)
+    RESTART_BUTTON = Button(WIDTH//2, HEIGHT//2+1*(HEIGHT//6), pygame.image.load(os.path.join("assets", "buttons", "restart_col_button.png")), 0.5)
+    QUIT_BUTTON = Button(WIDTH//2, HEIGHT//2+2*(HEIGHT//6), pygame.image.load(os.path.join("assets", "buttons", "quit_col_button.png")), 0.5)
 else:
-    RESUME_BUTTON = Button(WIDTH//2, 400, pygame.image.load(os.path.join("assets", "buttons", "resume_button.png")), 0.8)
-    RESTART_BUTTON = Button(WIDTH//2, 400, pygame.image.load(os.path.join("assets", "buttons", "restart_button.png")), 0.8)
-    QUIT_BUTTON = Button(WIDTH//2, 400, pygame.image.load(os.path.join("assets", "buttons", "quit_button.png")), 0.8)
+    RESUME_BUTTON = Button(WIDTH//2, HEIGHT//2, pygame.image.load(os.path.join("assets", "buttons", "resume_button.png")), 0.5)
+    RESTART_BUTTON = Button(WIDTH//2, HEIGHT//2+1*(HEIGHT//6), pygame.image.load(os.path.join("assets", "buttons", "restart_button.png")), 0.5)
+    QUIT_BUTTON = Button(WIDTH//2, HEIGHT//2+2*(HEIGHT//6), pygame.image.load(os.path.join("assets", "buttons", "quit_button.png")), 0.5)
 # COLORS (RGB)
 WHITE = (255, 255, 255)
 BROWN = (128, 0, 0)
@@ -330,27 +334,24 @@ def show_pause_menu(window):
     window.fill(BLACK)
     pygame.display.set_caption("Pause Menu")
     
-    # Render "Paused" text
-    paused_text = PAUSED_FONT.render("Paused", True, WHITE)
-    text_rect = paused_text.get_rect(center=(WIDTH // 2, HEIGHT // 3))
-    window.blit(paused_text, text_rect)
-    
-    # Render Buttons
-    if RESUME_BUTTON.render(window):# fix castling chatgpt glitch and check glitch
-        print("Unpaused.")
-        return PauseMenuAction.RESUME
-    if RESTART_BUTTON.render(window):
-        print("Restarting...")
-        return PauseMenuAction.RESTART
-    if QUIT_BUTTON.render(window):
-        return PauseMenuAction.QUIT
-    
-    # Update the display
-    pygame.display.flip()
-    
     # Wait for player to quit
     waiting = True
     while waiting:
+        # Render "Paused" text
+        paused_text = PAUSED_FONT.render("Paused", True, WHITE)
+        text_rect = paused_text.get_rect(center=(WIDTH // 2, HEIGHT // 6))
+        window.blit(paused_text, text_rect)
+        
+        # Render Buttons
+        if RESUME_BUTTON.render(window):# fix castling chatgpt glitch and check glitch
+            print("Unpaused.")
+            return PauseMenuAction.RESUME
+        if RESTART_BUTTON.render(window):
+            print("Restarting...")
+            return PauseMenuAction.RESTART
+        if QUIT_BUTTON.render(window):
+            return PauseMenuAction.QUIT
+    
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 return PauseMenuAction.QUIT
@@ -363,6 +364,9 @@ def show_pause_menu(window):
                     return PauseMenuAction.RESTART
                 if event.key == pygame.K_q:
                     return PauseMenuAction.QUIT
+        
+        # Update the display
+        pygame.display.flip()
 
 async def main(game):
     print("----------------------------------------")
@@ -496,7 +500,8 @@ async def main(game):
             print(f"Shadow Delay: {SHADOW_DELAY:.2f}s")
             return restart
 
-        pygame.display.flip()
+        if run:
+            pygame.display.flip()
 
 if __name__ == "__main__":
     restart = True
