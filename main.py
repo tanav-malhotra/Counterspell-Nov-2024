@@ -409,13 +409,13 @@ async def main(game):
                         print(f"Shadow Delay: {SHADOW_DELAY:.2f}s")
                         return True
                     continue
-                elif event.key in (pygame.K_LEFT, pygame.K_a, pygame.K_j):
+                elif event.key in {pygame.K_LEFT, pygame.K_a, pygame.K_j}:
                     new_x -= player_speed
-                elif event.key in (pygame.K_RIGHT, pygame.K_d, pygame.K_l):
+                elif event.key in {pygame.K_RIGHT, pygame.K_d, pygame.K_l}:
                     new_x += player_speed
-                elif event.key in (pygame.K_UP, pygame.K_w, pygame.K_i):
+                elif event.key in {pygame.K_UP, pygame.K_w, pygame.K_i}:
                     new_y -= player_speed
-                elif event.key in (pygame.K_DOWN, pygame.K_s, pygame.K_k):
+                elif event.key in {pygame.K_DOWN, pygame.K_s, pygame.K_k}:
                     new_y += player_speed
                 else:
                     continue
