@@ -43,6 +43,7 @@ FPS = 60
 window = pygame.display.set_mode((WINDOWSIZE))
 WINDOW_TITLE = "Shadow Paradox"
 pygame.display.set_caption(WINDOW_TITLE)
+pygame.display.set_icon(SHADOW_IMAGE)
 
 class MazeManager:
     def __init__(self, width, height):
