@@ -335,33 +335,32 @@ async def main(game):
                 run = False
 
             if event.type == pygame.KEYDOWN:
+                new_x, new_y = player_x, player_y
+
                 if event.key == pygame.K_ESCAPE:
                     print("error: Pause menu to be added.")
                     continue
                     #TODO
-
-                new_x, new_y = player_x, player_y
-                
-                if event.key in (pygame.K_LEFT, pygame.K_a, pygame.K_j):
+                elif event.key in (pygame.K_LEFT, pygame.K_a, pygame.K_j):
                     new_x -= player_speed
-                if event.key in (pygame.K_RIGHT, pygame.K_d, pygame.K_l):
+                elif event.key in (pygame.K_RIGHT, pygame.K_d, pygame.K_l):
                     new_x += player_speed
-                if event.key in (pygame.K_UP, pygame.K_w, pygame.K_i):
+                elif event.key in (pygame.K_UP, pygame.K_w, pygame.K_i):
                     new_y -= player_speed
-                if event.key in (pygame.K_DOWN, pygame.K_s, pygame.K_k):
+                elif event.key in (pygame.K_DOWN, pygame.K_s, pygame.K_k):
                     new_y += player_speed
+                else:
+                    continue
                 
                 # Check if the new position is valid
                 if maze_manager.get_cell(new_x, new_y) != 1:
-                    if not moved:
-                        moved = True
+                    moved = True
                     # Record the movement
-                    if moved:
-                        movement_history.append({
-                            'position': (new_x, new_y),
-                            'time': current_time
-                        })
-                        player_x, player_y = new_x, new_y
+                    movement_history.append({
+                        'position': (new_x, new_y),
+                        'time': current_time
+                    })
+                    player_x, player_y = new_x, new_y
 
         # Update shadow position based on movement history
         while movement_history and current_time - movement_history[0]['time'] >= SHADOW_DELAY:
