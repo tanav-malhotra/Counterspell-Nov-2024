@@ -59,7 +59,7 @@ class MazeManager:
         self.generate_initial_sections()
     
     def get_neighbors(self, x, y, grid):
-        """Get valid neighboring cells for maze generation"""
+        ### Get valid neighboring cells for maze generation
         directions = [(0, 2), (2, 0), (0, -2), (-2, 0)]
         neighbors = []
         for dx, dy in directions:
@@ -72,7 +72,7 @@ class MazeManager:
         return neighbors
     
     def carve_path(self, grid, start_x, start_y, entry_points=None, exit_points=None):
-        """Generate maze paths using modified DFS with guaranteed connectivity"""
+        ### Generate maze paths using modified DFS with guaranteed connectivity
         stack = [(start_x, start_y)]
         grid[start_y][start_x] = 0
         
@@ -105,7 +105,7 @@ class MazeManager:
         return grid
 
     def ensure_vertical_connectivity(self, grid, section_number):
-        """Ensure vertical connectivity between sections with multiple guaranteed paths"""
+        ### Ensure vertical connectivity between sections with multiple guaranteed paths
         if section_number in self.path_memory:
             entry_points = self.path_memory[section_number]['entries']
         else:
@@ -147,7 +147,7 @@ class MazeManager:
         return grid, entry_points, exit_points
 
     def generate_maze_section(self, section_number):
-        """Generate a new maze section with guaranteed paths"""
+        ### Generate a new maze section with guaranteed paths
         grid = np.ones((self.section_height, self.width), dtype=int)
         
         # Get or generate entry/exit points
@@ -170,7 +170,7 @@ class MazeManager:
         return grid
     
     def connect_all_points(self, grid, entry_points, exit_points):
-        """Ensure all entry and exit points are connected to the maze"""
+        ### Ensure all entry and exit points are connected to the maze
         def find_nearest_path(x, y, grid):
             visited = set()
             queue = deque([(x, y, [])])
@@ -205,17 +205,17 @@ class MazeManager:
                     grid[py][px] = 0
 
     def generate_initial_sections(self):
-        """Generate initial maze sections"""
+        ### Generate initial maze sections
         self.maze_sections[0] = self.generate_maze_section(0)
         self.maze_sections[1] = self.generate_maze_section(1)
     
     def get_current_grid_position(self, pixel_y):
-        """Convert pixel Y position to grid coordinates and section number"""
+        ### Convert pixel Y position to grid coordinates and section number
         section = pixel_y // (self.section_height * GRID_SIZE)
         return section
     
     def ensure_section_exists(self, section):
-        """Ensure that the required maze section exists and manage section cleanup"""
+        ### Ensure that the required maze section exists and manage section cleanup
         # Generate new sections above as needed
         while section >= self.highest_section:
             self.highest_section += 1
@@ -240,7 +240,7 @@ class MazeManager:
                 self.highest_section = max(self.maze_sections.keys())
     
     def get_cell(self, pixel_x, pixel_y):
-        """Get the value of a cell at the given pixel coordinates"""
+        ### Get the value of a cell at the given pixel coordinates
         grid_x = pixel_x // GRID_SIZE
         grid_y = pixel_y // GRID_SIZE
         section = self.get_current_grid_position(pixel_y)
@@ -256,7 +256,7 @@ class MazeManager:
         return 1
     
     def add_extra_passages(self, grid):
-        """Add some random extra passages to prevent dead ends"""
+        ### Add some random extra passages to prevent dead ends
         for _ in range(self.width // 2):
             x = random.randint(1, self.width - 2)
             y = random.randint(1, self.section_height - 2)
@@ -271,7 +271,7 @@ class MazeManager:
         return grid
 
 def show_game_over_screen(window, score, shadow_delay): # returns whether player wants to restart
-    """Display the Game Over screen with the final score and shadow delay."""
+    ### Display the Game Over screen with the final score and shadow delay.
     window.fill(BLACK)
     
     # Render "Game Over" text
@@ -299,9 +299,13 @@ def show_game_over_screen(window, score, shadow_delay): # returns whether player
             if event.type == pygame.QUIT:
                 return False
             if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_ESCAPE:
+                    return False
                 return True
 
-async def main():
+async def main(game):
+    print("------------------------------------------------")
+    print(f"Game #{game}:")
     clock = pygame.time.Clock()
     run = True
 
@@ -333,6 +337,7 @@ async def main():
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_ESCAPE:
                     print("error: Pause menu to be added.")
+                    continue
                     #TODO
 
                 new_x, new_y = player_x, player_y
@@ -420,13 +425,10 @@ async def main():
 
         # Check for collision between shadow and player
         if shadow_x == player_x and shadow_y == player_y and moved:
-            if show_game_over_screen(window, score, SHADOW_DELAY): # returns whether player wants to restart
-                print("error: Restart functionality to be added.")
-                #TODO: restart
-                #waiting = False
-                #break
-            run = False  # End game after showing Game Over screen
-            break
+            restart = show_game_over_screen(window, score, SHADOW_DELAY) # returns whether player wants to restart
+            print(f"Final Score: {score}")
+            print(f"Final Shadow Delay: {SHADOW_DELAY:.2f}")
+            return restart
 
         pygame.display.flip()
 
@@ -436,4 +438,8 @@ async def main():
     pygame.quit()
 
 if __name__ == "__main__":
-    asyncio.run(main())
+    restart = True
+    game = 0
+    while restart:
+        game += 1
+        restart = asyncio.run(main(game))
