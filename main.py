@@ -2,6 +2,7 @@ import pygame
 from pygame.locals import *
 import numpy as np
 import os
+import sys
 import random
 import time
 from collections import deque
@@ -336,122 +337,109 @@ async def main(game):
         clock.tick(FPS)
         current_time = time.time()
 
-        if is_paused:
-            for event in pygame.event.get():
-                if event.type == pygame.QUIT:
-                    run = False
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                run = False
 
-                if event.type == pygame.KEYDOWN:
-                    if event.key == pygame.K_ESCAPE:
-                        is_paused = not is_paused
-                        print("Unpaused.")
-                        break
-        else:
-            for event in pygame.event.get():
-                if event.type == pygame.QUIT:
-                    run = False
+            if event.type == pygame.KEYDOWN:
+                new_x, new_y = player_x, player_y
 
-                if event.type == pygame.KEYDOWN:
-                    new_x, new_y = player_x, player_y
-
-                    if event.key == pygame.K_ESCAPE:
-                        is_paused = not is_paused
+                if event.key == pygame.K_ESCAPE:
+                    is_paused = not is_paused
+                    if is_paused:
                         print("Paused...")
-                        break
-                    elif event.key in (pygame.K_LEFT, pygame.K_a, pygame.K_j):
-                        new_x -= player_speed
-                    elif event.key in (pygame.K_RIGHT, pygame.K_d, pygame.K_l):
-                        new_x += player_speed
-                    elif event.key in (pygame.K_UP, pygame.K_w, pygame.K_i):
-                        new_y -= player_speed
-                    elif event.key in (pygame.K_DOWN, pygame.K_s, pygame.K_k):
-                        new_y += player_speed
                     else:
-                        continue
-                    
-                    # Check if the new position is valid
-                    if maze_manager.get_cell(new_x, new_y) != 1:
-                        moved = True
-                        # Record the movement
-                        movement_history.append({
-                            "position": (new_x, new_y),
-                            "time": current_time
-                        })
-                        player_x, player_y = new_x, new_y
-
-            # Update shadow position based on movement history
-            while movement_history and current_time - movement_history[0]["time"] >= SHADOW_DELAY:
-                shadow_move = movement_history.popleft()
-                shadow_x, shadow_y = shadow_move["position"]
-
-            # Update camera position to follow player smoothly
-            target_camera_y = player_y - HEIGHT // 2
-            camera_y += (target_camera_y - camera_y) * 0.1
-
-            # Draw background
-            window.fill(GRAY)
-
-            # Calculate visible range
-            visible_sections = set([
-                maze_manager.get_current_grid_position(player_y - HEIGHT),
-                maze_manager.get_current_grid_position(player_y),
-                maze_manager.get_current_grid_position(player_y + HEIGHT)
-            ])
-
-            # Draw visible maze sections
-            for section in visible_sections:
-                maze_manager.ensure_section_exists(section)
-                base_y = section * maze_manager.section_height * GRID_SIZE
+                        print("Unpaused.")
+                    continue
+                elif event.key in (pygame.K_LEFT, pygame.K_a, pygame.K_j):
+                    new_x -= player_speed
+                elif event.key in (pygame.K_RIGHT, pygame.K_d, pygame.K_l):
+                    new_x += player_speed
+                elif event.key in (pygame.K_UP, pygame.K_w, pygame.K_i):
+                    new_y -= player_speed
+                elif event.key in (pygame.K_DOWN, pygame.K_s, pygame.K_k):
+                    new_y += player_speed
+                else:
+                    continue
                 
-                for y in range(maze_manager.section_height):
-                    for x in range(maze_manager.width):
-                        absolute_y = base_y + y * GRID_SIZE
-                        cell = maze_manager.get_cell(x * GRID_SIZE, absolute_y)
+                # Check if the new position is valid
+                if maze_manager.get_cell(new_x, new_y) != 1:
+                    moved = True
+                    # Record the movement
+                    movement_history.append({
+                        "position": (new_x, new_y),
+                        "time": current_time
+                    })
+                    player_x, player_y = new_x, new_y
+
+        # Update shadow position based on movement history
+        while movement_history and current_time - movement_history[0]["time"] >= SHADOW_DELAY:
+            shadow_move = movement_history.popleft()
+            shadow_x, shadow_y = shadow_move["position"]
+
+        # Update camera position to follow player smoothly
+        target_camera_y = player_y - HEIGHT // 2
+        camera_y += (target_camera_y - camera_y) * 0.1
+
+        # Draw background
+        window.fill(GRAY)
+
+        # Calculate visible range
+        visible_sections = set([
+            maze_manager.get_current_grid_position(player_y - HEIGHT),
+            maze_manager.get_current_grid_position(player_y),
+            maze_manager.get_current_grid_position(player_y + HEIGHT)
+        ])
+
+        # Draw visible maze sections
+        for section in visible_sections:
+            maze_manager.ensure_section_exists(section)
+            base_y = section * maze_manager.section_height * GRID_SIZE
+            
+            for y in range(maze_manager.section_height):
+                for x in range(maze_manager.width):
+                    absolute_y = base_y + y * GRID_SIZE
+                    cell = maze_manager.get_cell(x * GRID_SIZE, absolute_y)
+                    
+                    screen_x = x * GRID_SIZE
+                    screen_y = absolute_y - int(camera_y)
+                    
+                    if -GRID_SIZE <= screen_y <= HEIGHT:
+                        if cell == 1:  # Wall
+                            pygame.draw.rect(window, BROWN, (screen_x, screen_y, GRID_SIZE, GRID_SIZE))
+                        else:  # Path
+                            pygame.draw.rect(window, GRAY, (screen_x, screen_y, GRID_SIZE, GRID_SIZE))
                         
-                        screen_x = x * GRID_SIZE
-                        screen_y = absolute_y - int(camera_y)
-                        
-                        if -GRID_SIZE <= screen_y <= HEIGHT:
-                            if cell == 1:  # Wall
-                                pygame.draw.rect(window, BROWN, (screen_x, screen_y, GRID_SIZE, GRID_SIZE))
-                            else:  # Path
-                                pygame.draw.rect(window, GRAY, (screen_x, screen_y, GRID_SIZE, GRID_SIZE))
-                            
-                            # Grid lines
-                            pygame.draw.rect(window, BLACK, (screen_x, screen_y, GRID_SIZE, GRID_SIZE), 1)
+                        # Grid lines
+                        pygame.draw.rect(window, BLACK, (screen_x, screen_y, GRID_SIZE, GRID_SIZE), 1)
 
-            # Draw shadow (only if movement history exists)
-            if movement_history:
-                window.blit(SHADOW, (shadow_x, shadow_y - camera_y))
+        # Draw shadow (only if movement history exists)
+        if movement_history:
+            window.blit(SHADOW, (shadow_x, shadow_y - camera_y))
 
-            # Draw character
-            window.blit(CHARACTER, (player_x, player_y - camera_y))
+        # Draw character
+        window.blit(CHARACTER, (player_x, player_y - camera_y))
 
-            # score (height reached)
-            score = abs(player_y // GRID_SIZE - 13)
-            if score > 0:
-                pygame.display.set_caption(f"Score: {score}")
-            else:
-                pygame.display.set_caption(WINDOW_TITLE)
+        # score (height reached)
+        score = abs(player_y // GRID_SIZE - 13)
+        if score > 0:
+            pygame.display.set_caption(f"Score: {score}")
+        else:
+            pygame.display.set_caption(WINDOW_TITLE)
 
-            # Calculate how many multiples of 20 the score has reached
-            delay_reduction = (score // 20) * 0.05
-            # New delay, ensuring it does not drop below 0
-            SHADOW_DELAY = max(0.5, SHADOW_DELAY_INIT - delay_reduction)
+        # Calculate how many multiples of 20 the score has reached
+        delay_reduction = (score // 20) * 0.05
+        # New delay, ensuring it does not drop below 0
+        SHADOW_DELAY = max(0.5, SHADOW_DELAY_INIT - delay_reduction)
 
-            # Check for collision between shadow and player
-            if shadow_x == player_x and shadow_y == player_y and moved:
-                restart = show_game_over_screen(window, score, SHADOW_DELAY) # returns whether player wants to restart
-                print(f"Score: {score}")
-                print(f"Shadow Delay: {SHADOW_DELAY:.2f}")
-                return restart
+        # Check for collision between shadow and player
+        if shadow_x == player_x and shadow_y == player_y and moved:
+            restart = show_game_over_screen(window, score, SHADOW_DELAY) # returns whether player wants to restart
+            print(f"Score: {score}")
+            print(f"Shadow Delay: {SHADOW_DELAY:.2f}s")
+            return restart
 
-            pygame.display.flip()
-
-    print(f"Final Score: {score}")
-    print(f"Final Shadow Delay: {SHADOW_DELAY:.2f}")
-    await asyncio.sleep(0)
-    pygame.quit()
+        pygame.display.flip()
 
 if __name__ == "__main__":
     restart = True
@@ -459,3 +447,5 @@ if __name__ == "__main__":
     while restart:
         game += 1
         restart = asyncio.run(main(game))
+    pygame.quit()
+    sys.exit()
