@@ -8,6 +8,7 @@ import time
 from collections import deque
 import asyncio
 from button import Button
+from enum import Enum
 
 ##### Initializing the Pygame Libraries #####
 pygame.init()
@@ -48,6 +49,7 @@ GRAY = (142, 143, 133)
 RED = (255, 0, 0)
 # FONT
 GAME_OVER_FONT = pygame.font.SysFont("times new roman", 96)
+PAUSED_FONT = pygame.font.SysFont("times new roman", 96)
 FONT = pygame.font.SysFont("times new roman", 48)
 # FPS
 FPS = 60
@@ -282,6 +284,11 @@ class MazeManager:
         
         return grid
 
+class PauseMenuAction(Enum):
+    RESUME = 0
+    RESTART = 1
+    QUIT = 2
+
 def show_game_over_screen(window, score, shadow_delay): # returns whether player wants to restart
     ### Display the Game Over screen with the final score and shadow delay.
     window.fill(BLACK)
@@ -313,9 +320,49 @@ def show_game_over_screen(window, score, shadow_delay): # returns whether player
             if event.type == pygame.QUIT:
                 return False
             if event.type == pygame.KEYDOWN and (pygame.time.get_ticks() - game_over_time >= 500):
-                if event.key == pygame.K_ESCAPE:
+                if event.key in {pygame.K_ESCAPE, pygame.K_q}:
                     return False
                 return True
+
+def show_pause_menu(window):
+    ### Display Pause Menu
+    print("Paused...")
+    window.fill(BLACK)
+    pygame.display.set_caption("Pause Menu")
+    
+    # Render "Paused" text
+    paused_text = PAUSED_FONT.render("Paused", True, WHITE)
+    text_rect = paused_text.get_rect(center=(WIDTH // 2, HEIGHT // 3))
+    window.blit(paused_text, text_rect)
+    
+    # Render Buttons
+    if RESUME_BUTTON.render(window):# fix castling chatgpt glitch and check glitch
+        print("Unpaused.")
+        return PauseMenuAction.RESUME
+    if RESTART_BUTTON.render(window):
+        print("Restarting...")
+        return PauseMenuAction.RESTART
+    if QUIT_BUTTON.render(window):
+        return PauseMenuAction.QUIT
+    
+    # Update the display
+    pygame.display.flip()
+    
+    # Wait for player to quit
+    waiting = True
+    while waiting:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                return PauseMenuAction.QUIT
+            if event.type == pygame.KEYDOWN:
+                if event.key in {pygame.K_ESCAPE, pygame.K_SPACE, pygame.K_RETURN}:
+                    print("Unpaused.")
+                    return PauseMenuAction.RESUME
+                if event.key in {pygame.K_DELETE, pygame.K_BACKSPACE}:
+                    print("Restarting...")
+                    return PauseMenuAction.RESTART
+                if event.key == pygame.K_q:
+                    return PauseMenuAction.QUIT
 
 async def main(game):
     print("----------------------------------------")
@@ -353,11 +400,13 @@ async def main(game):
                 new_x, new_y = player_x, player_y
 
                 if event.key == pygame.K_ESCAPE:
-                    is_paused = not is_paused
-                    if is_paused:
-                        print("Paused...")
-                    else:
-                        print("Unpaused.")
+                    action = show_pause_menu(window)
+                    if action == PauseMenuAction.QUIT:
+                        run = False
+                    if action == PauseMenuAction.RESTART:
+                        print(f"Score: {score}")
+                        print(f"Shadow Delay: {SHADOW_DELAY:.2f}s")
+                        return True
                     continue
                 elif event.key in (pygame.K_LEFT, pygame.K_a, pygame.K_j):
                     new_x -= player_speed
