@@ -305,7 +305,7 @@ def show_game_over_screen(window, score, shadow_delay): # returns whether player
                 return True
 
 async def main(game):
-    print("------------------------------------------------")
+    print("----------------------------------------")
     print(f"Game #{game}:")
     clock = pygame.time.Clock()
     run = True
