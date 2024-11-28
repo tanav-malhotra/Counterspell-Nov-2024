@@ -21,9 +21,9 @@ if WIDTH != HEIGHT:
 GRID_SIZE = 50
 CHARACTER_WIDTH, CHARACTER_HEIGHT = GRID_SIZE, GRID_SIZE
 # CHARACTERS
-CHARACTER_IMAGE = pygame.image.load(os.path.join('Assets', 'character.png'))
+CHARACTER_IMAGE = pygame.image.load(os.path.join("Assets", "character.png"))
 CHARACTER = pygame.transform.scale(CHARACTER_IMAGE, (CHARACTER_WIDTH, CHARACTER_HEIGHT))
-SHADOW_IMAGE = pygame.image.load(os.path.join('Assets', 'shadow.png'))
+SHADOW_IMAGE = pygame.image.load(os.path.join("Assets", "shadow.png"))
 SHADOW = pygame.transform.scale(SHADOW_IMAGE, (CHARACTER_WIDTH, CHARACTER_HEIGHT))
 SHADOW_DELAY_INIT = 1.5
 SHADOW_DELAY_INIT = max(0.5, min(3, SHADOW_DELAY_INIT))
@@ -35,8 +35,8 @@ BLACK = (0, 0, 0)
 GRAY = (142, 143, 133)
 RED = (255, 0, 0)
 # FONT
-GAME_OVER_FONT = pygame.font.SysFont('times new roman', 96)
-FONT = pygame.font.SysFont('times new roman', 48)
+GAME_OVER_FONT = pygame.font.SysFont("times new roman", 96)
+FONT = pygame.font.SysFont("times new roman", 48)
 # FPS
 FPS = 60
 ##### WINDOW #####
@@ -107,7 +107,7 @@ class MazeManager:
     def ensure_vertical_connectivity(self, grid, section_number):
         ### Ensure vertical connectivity between sections with multiple guaranteed paths
         if section_number in self.path_memory:
-            entry_points = self.path_memory[section_number]['entries']
+            entry_points = self.path_memory[section_number]["entries"]
         else:
             # Generate more entry points for better connectivity
             entry_points = set(random.sample(range(1, self.width-1, 2), 
@@ -125,7 +125,7 @@ class MazeManager:
                 exit_points.add(potential_exit)
         
         # Store exit points as entry points for next section
-        self.path_memory[section_number + 1] = {'entries': exit_points}
+        self.path_memory[section_number + 1] = {"entries": exit_points}
         
         # Create wider passages
         for x in entry_points:
@@ -357,15 +357,15 @@ async def main(game):
                     moved = True
                     # Record the movement
                     movement_history.append({
-                        'position': (new_x, new_y),
-                        'time': current_time
+                        "position": (new_x, new_y),
+                        "time": current_time
                     })
                     player_x, player_y = new_x, new_y
 
         # Update shadow position based on movement history
-        while movement_history and current_time - movement_history[0]['time'] >= SHADOW_DELAY:
+        while movement_history and current_time - movement_history[0]["time"] >= SHADOW_DELAY:
             shadow_move = movement_history.popleft()
-            shadow_x, shadow_y = shadow_move['position']
+            shadow_x, shadow_y = shadow_move["position"]
 
         # Update camera position to follow player smoothly
         target_camera_y = player_y - HEIGHT // 2
