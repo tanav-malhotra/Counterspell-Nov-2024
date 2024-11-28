@@ -349,7 +349,8 @@ async def main():
                 
                 # Check if the new position is valid
                 if maze_manager.get_cell(new_x, new_y) != 1:
-                    moved = True
+                    if not moved:
+                        moved = True
                     # Record the movement
                     if moved:
                         movement_history.append({
