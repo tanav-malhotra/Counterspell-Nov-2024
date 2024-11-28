@@ -6,4 +6,4 @@
 ## Authors:
 > Jawadul Jarif, Bryan Lochan, & Tanav Malhotra
 ## License:
-> The game is licensed under the GNU General Public License v3.0 (GPL-3.0). You are free to use, modify, and distribute them under the terms of the GPL-3.0. For more details, please refer to the [LICENSE](./LICENSE) file.
+> The game is licensed under the GNU General Public License v3.0 (GPL-3.0). You are free to use, modify, and distribute it under the terms of the GPL-3.0. For more details, please refer to the [LICENSE](./LICENSE) file.
