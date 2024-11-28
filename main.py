@@ -31,7 +31,15 @@ SHADOW_DELAY_INIT = 1.5 # delay in seconds
 SHADOW_DELAY_INIT = max(0.5, min(3, SHADOW_DELAY_INIT))
 SHADOW_DELAY = SHADOW_DELAY_INIT # delay in seconds
 # BUTTONS
-
+COLORED_BUTTONS = True # change to False for white-on-black buttons
+if COLORED_BUTTONS:
+    RESUME_BUTTON = Button(WIDTH//2, 400, pygame.image.load(os.path.join("assets", "buttons", "resume_col_button.png")), 1)
+    RESTART_BUTTON = Button(WIDTH//2, 400, pygame.image.load(os.path.join("assets", "buttons", "restart_col_button.png")), 1)
+    QUIT_BUTTON = Button(WIDTH//2, 400, pygame.image.load(os.path.join("assets", "buttons", "quit_col_button.png")), 1)
+else:
+    RESUME_BUTTON = Button(WIDTH//2, 400, pygame.image.load(os.path.join("assets", "buttons", "resume_button.png")), 1)
+    RESTART_BUTTON = Button(WIDTH//2, 400, pygame.image.load(os.path.join("assets", "buttons", "restart_button.png")), 1)
+    QUIT_BUTTON = Button(WIDTH//2, 400, pygame.image.load(os.path.join("assets", "buttons", "quit_button.png")), 1)
 # COLORS (RGB)
 WHITE = (255, 255, 255)
 BROWN = (128, 0, 0)
