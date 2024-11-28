@@ -337,7 +337,15 @@ async def main(game):
         current_time = time.time()
 
         if is_paused:
-            pass
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    run = False
+
+                if event.type == pygame.KEYDOWN:
+                    if event.key == pygame.K_ESCAPE:
+                        is_paused = not is_paused
+                        print("Unpaused.")
+                        break
         else:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
@@ -348,11 +356,8 @@ async def main(game):
 
                     if event.key == pygame.K_ESCAPE:
                         is_paused = not is_paused
-                        if is_paused:
-                            print("Paused...")
-                        else:
-                            print("Unpaused.")
-                        continue
+                        print("Paused...")
+                        break
                     elif event.key in (pygame.K_LEFT, pygame.K_a, pygame.K_j):
                         new_x -= player_speed
                     elif event.key in (pygame.K_RIGHT, pygame.K_d, pygame.K_l):
