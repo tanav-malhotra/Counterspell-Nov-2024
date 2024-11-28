@@ -298,12 +298,12 @@ def show_game_over_screen(window, score, shadow_delay): # returns whether player
     
     # Wait for player to quit
     waiting = True
-    time.sleep(0.5)
+    game_over_time = pygame.time.get_ticks()
     while waiting:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 return False
-            if event.type == pygame.KEYDOWN:
+            if event.type == pygame.KEYDOWN and (pygame.time.get_ticks() - game_over_time >= 500):
                 if event.key == pygame.K_ESCAPE:
                     return False
                 return True
@@ -442,8 +442,8 @@ async def main(game):
             # Check for collision between shadow and player
             if shadow_x == player_x and shadow_y == player_y and moved:
                 restart = show_game_over_screen(window, score, SHADOW_DELAY) # returns whether player wants to restart
-                print(f"Final Score: {score}")
-                print(f"Final Shadow Delay: {SHADOW_DELAY:.2f}")
+                print(f"Score: {score}")
+                print(f"Shadow Delay: {SHADOW_DELAY:.2f}")
                 return restart
 
             pygame.display.flip()
