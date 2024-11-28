@@ -69,7 +69,7 @@ class MazeManager:
         self.highest_section = 1
         self.vertical_paths = set()
         self.path_memory = {}
-        self.minimum_paths = 3  # Ensure at least 3 paths between sections
+        self.minimum_paths = 3  # ensure at least 3 paths between sections
         self.generate_initial_sections()
     
     def get_neighbors(self, x, y, grid):
@@ -145,7 +145,7 @@ class MazeManager:
         for x in entry_points:
             grid[0][x] = 0
             grid[1][x] = 0
-            if x > 1:  # Add side passages
+            if x > 1:  # add side passages
                 grid[1][x-1] = 0
             if x < len(grid[0])-2:
                 grid[1][x+1] = 0
@@ -153,7 +153,7 @@ class MazeManager:
         for x in exit_points:
             grid[-1][x] = 0
             grid[-2][x] = 0
-            if x > 1:  # Add side passages
+            if x > 1:  # add side passages
                 grid[-2][x-1] = 0
             if x < len(grid[0])-2:
                 grid[-2][x+1] = 0
@@ -206,14 +206,14 @@ class MazeManager:
         
         # Connect entry points
         for x in entry_points:
-            if grid[1][x] == 1:  # If not already connected
+            if grid[1][x] == 1:  # if not already connected
                 path = find_nearest_path(x, 1, grid)
                 for px, py in path:
                     grid[py][px] = 0
         
         # Connect exit points
         for x in exit_points:
-            if grid[-2][x] == 1:  # If not already connected
+            if grid[-2][x] == 1:  # if not already connected
                 path = find_nearest_path(x, len(grid)-2, grid)
                 for px, py in path:
                     grid[py][px] = 0
@@ -463,12 +463,12 @@ async def main(game):
                     screen_y = absolute_y - int(camera_y)
                     
                     if -GRID_SIZE <= screen_y <= HEIGHT:
-                        if cell == 1:  # Wall
+                        if cell == 1:  # wall
                             pygame.draw.rect(window, BROWN, (screen_x, screen_y, GRID_SIZE, GRID_SIZE))
-                        else:  # Path
+                        else:  # path
                             pygame.draw.rect(window, GRAY, (screen_x, screen_y, GRID_SIZE, GRID_SIZE))
                         
-                        # Grid lines
+                        # grid lines
                         pygame.draw.rect(window, BLACK, (screen_x, screen_y, GRID_SIZE, GRID_SIZE), 1)
 
         # Draw shadow (only if movement history exists)
