@@ -356,7 +356,7 @@ def show_pause_menu(window):
                 if event.key == pygame.K_ESCAPE:
                     print("Unpaused.")
                     return PauseMenuAction.RESUME
-                if event.key in {pygame.K_DELETE, pygame.K_BACKSPACE, pygame.K_RETURN, pygame.K_KP_ENTER}:
+                if event.key in {pygame.K_DELETE, pygame.K_BACKSPACE, pygame.K_RETURN, pygame.K_KP_ENTER, pygame.K_r}:
                     print("Restarting...")
                     return PauseMenuAction.RESTART
                 if event.key == pygame.K_q:
