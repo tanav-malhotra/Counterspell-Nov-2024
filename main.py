@@ -10,16 +10,13 @@ import asyncio
 from button import Button
 from enum import Enum
 
-is_mac = sys.platform == "darwin"  # "darwin" is the system name for macOS
-
+is_mac = sys.platform == "darwin"
 if is_mac:
     import objc
     from Cocoa import NSApplication, NSObject
-
     class AppDelegate(NSObject):
         def applicationSupportsSecureRestorableState_(self, app):
             return False  # Disable state restoration on macOS
-
     # Create the application and delegate
     app = NSApplication.sharedApplication()
     delegate = AppDelegate.alloc().init()
