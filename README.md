@@ -2,7 +2,7 @@
 ## Theme: 
 > You are your own enemy.
 ## Game Overview:
-> A game where you must outrun your own shadow, which replicates your every move and timing. As you progress, the shadow speeds up, intensifying the challenge. The levels are infinitely long and randomly generated with each playthrough. Your score is based on how far you can move vertically from your starting position. 
+> A game where you must outrun your own shadow, which replicates your every move and timing. As you progress, the shadow speeds up, intensifying the challenge. The environment is an infinite, randomly generated maze that changes with each playthrough. Your score is determined by how far you can move vertically from your starting position while avoiding the shadow.
 ## Authors:
 > Jawadul Jarif, Bryan Lochan, & Tanav Malhotra
 ## License:
