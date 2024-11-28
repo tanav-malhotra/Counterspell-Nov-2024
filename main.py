@@ -6,6 +6,7 @@ import random
 import time
 from collections import deque
 import asyncio
+from button import Button
 
 ##### Initializing the Pygame Libraries #####
 pygame.init()
@@ -21,13 +22,15 @@ if WIDTH != HEIGHT:
 GRID_SIZE = 50
 CHARACTER_WIDTH, CHARACTER_HEIGHT = GRID_SIZE, GRID_SIZE
 # CHARACTERS
-CHARACTER_IMAGE = pygame.image.load(os.path.join("Assets", "character.png"))
+CHARACTER_IMAGE = pygame.image.load(os.path.join("assets", "character.png"))
 CHARACTER = pygame.transform.scale(CHARACTER_IMAGE, (CHARACTER_WIDTH, CHARACTER_HEIGHT))
-SHADOW_IMAGE = pygame.image.load(os.path.join("Assets", "shadow.png"))
+SHADOW_IMAGE = pygame.image.load(os.path.join("assets", "shadow.png"))
 SHADOW = pygame.transform.scale(SHADOW_IMAGE, (CHARACTER_WIDTH, CHARACTER_HEIGHT))
-SHADOW_DELAY_INIT = 1.5
+SHADOW_DELAY_INIT = 1.5 # delay in seconds
 SHADOW_DELAY_INIT = max(0.5, min(3, SHADOW_DELAY_INIT))
-SHADOW_DELAY = SHADOW_DELAY_INIT # Delay in seconds
+SHADOW_DELAY = SHADOW_DELAY_INIT # delay in seconds
+# BUTTONS
+
 # COLORS (RGB)
 WHITE = (255, 255, 255)
 BROWN = (128, 0, 0)
