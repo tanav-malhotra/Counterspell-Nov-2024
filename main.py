@@ -339,19 +339,16 @@ async def main():
                 
                 if event.key in (pygame.K_LEFT, pygame.K_a, pygame.K_j):
                     new_x -= player_speed
-                    moved = True
                 if event.key in (pygame.K_RIGHT, pygame.K_d, pygame.K_l):
                     new_x += player_speed
-                    moved = True
                 if event.key in (pygame.K_UP, pygame.K_w, pygame.K_i):
                     new_y -= player_speed
-                    moved = True
                 if event.key in (pygame.K_DOWN, pygame.K_s, pygame.K_k):
                     new_y += player_speed
-                    moved = True
                 
                 # Check if the new position is valid
                 if maze_manager.get_cell(new_x, new_y) != 1:
+                    moved = True
                     # Record the movement
                     if moved:
                         movement_history.append({
