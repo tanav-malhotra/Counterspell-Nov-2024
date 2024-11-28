@@ -273,6 +273,7 @@ class MazeManager:
 def show_game_over_screen(window, score, shadow_delay): # returns whether player wants to restart
     ### Display the Game Over screen with the final score and shadow delay.
     window.fill(BLACK)
+    pygame.display.set_caption("Game Over")
     
     # Render "Game Over" text
     game_over_text = GAME_OVER_FONT.render("GAME OVER", True, RED)
@@ -308,6 +309,7 @@ async def main(game):
     print("----------------------------------------")
     print(f"Game #{game}:")
     clock = pygame.time.Clock()
+    is_paused = False
     run = True
 
     # Initialize player position
@@ -339,9 +341,12 @@ async def main(game):
                 new_x, new_y = player_x, player_y
 
                 if event.key == pygame.K_ESCAPE:
-                    print("error: Pause menu to be added.")
+                    is_paused = not is_paused
+                    if is_paused:
+                        print("Paused...")
+                    else:
+                        print("Unpaused.")
                     continue
-                    #TODO
                 elif event.key in (pygame.K_LEFT, pygame.K_a, pygame.K_j):
                     new_x -= player_speed
                 elif event.key in (pygame.K_RIGHT, pygame.K_d, pygame.K_l):
