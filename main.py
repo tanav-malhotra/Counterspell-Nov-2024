@@ -10,18 +10,6 @@ import asyncio
 from button import Button
 from enum import Enum
 
-is_mac = sys.platform == "darwin"
-if is_mac:
-    import objc
-    from Cocoa import NSApplication, NSObject
-    class AppDelegate(NSObject):
-        def applicationSupportsSecureRestorableState_(self, app):
-            return False  # Disable state restoration on macOS
-    # Create the application and delegate
-    app = NSApplication.sharedApplication()
-    delegate = AppDelegate.alloc().init()
-    app.setDelegate_(delegate)
-
 ##### Initializing the Pygame Libraries #####
 pygame.init()
 pygame.font.init()
