@@ -1,7 +1,8 @@
+import os
+os.environ['PYGAME_HIDE_SUPPORT_PROMPT'] = '1'
+import sys
 import pygame
 import numpy as np
-import os
-import sys
 import random
 import time
 from collections import deque
