@@ -533,6 +533,7 @@ async def main(game):
 
         if run:
             pygame.display.flip()
+        await asyncio.sleep(0)
     print(f"Score: {score}")
     print(f"Shadow Delay: {SHADOW_DELAY:.2f}s")
 
