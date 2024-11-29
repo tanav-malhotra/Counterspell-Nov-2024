@@ -404,15 +404,12 @@ async def main(game):
 
                 if event.key == pygame.K_ESCAPE:
                     action = show_pause_menu(window)
-                    is_paused = True
                     if action == PauseMenuAction.QUIT:
                         run = False
                     if action == PauseMenuAction.RESTART:
                         print(f"Score: {score}")
                         print(f"Shadow Delay: {SHADOW_DELAY:.2f}s")
                         return True
-                    if action == PauseMenuAction.RESUME:
-                        is_paused = False
                     continue
                 elif event.key in {pygame.K_LEFT, pygame.K_a, pygame.K_j}:
                     new_x -= player_speed
