@@ -309,7 +309,7 @@ class PauseMenuAction(Enum):
     RESTART = 1
     QUIT = 2
 
-def show_game_over_screen(window, score, shadow_delay): # returns whether player wants to restart
+def show_game_over_screen(window, score, shadow_delay, clock): # returns whether player wants to restart
     ### Display the Game Over screen with the final score and shadow delay.
     rand_num = random.randint(1, 2)
     if rand_num == 1:
@@ -319,7 +319,7 @@ def show_game_over_screen(window, score, shadow_delay): # returns whether player
     pygame.mixer.music.fadeout(1500)
     
     window.fill(BLACK)
-    pygame.display.set_caption("Game Over")
+    pygame.display.set_caption(f"Game Over - FPS: {int(clock.get_fps())}")
     
     # Render "Game Over" text
     game_over_text = GAME_OVER_FONT.render("GAME OVER", True, RED)
@@ -352,13 +352,13 @@ def show_game_over_screen(window, score, shadow_delay): # returns whether player
                     return False
                 return True
 
-def show_pause_menu(window, moved):
+def show_pause_menu(window, moved, clock):
     ### Display Pause Menu
     PAUSE_MENU_MUSIC.play(-1)
     pygame.mixer.music.fadeout(1500)
 
     window.fill(BLACK)
-    pygame.display.set_caption("Pause Menu")
+    pygame.display.set_caption(f"Pause Menu - FPS: {int(clock.get_fps())}")
     print("Paused...")
     
     action = None
@@ -442,7 +442,7 @@ async def main(game):
 
                 if event.key == pygame.K_ESCAPE:
                     pause_start = time.time()
-                    action = show_pause_menu(window, moved)
+                    action = show_pause_menu(window, moved, clock)
                     pause_end = time.time()
                     pause_duration += pause_end - pause_start
                     if action == PauseMenuAction.QUIT:
@@ -530,9 +530,9 @@ async def main(game):
         # score (height reached)
         score = abs(player_y // GRID_SIZE - 13)
         if score > 0:
-            pygame.display.set_caption(f"Score: {score}")
+            pygame.display.set_caption(f"Score: {score} - FPS: {int(clock.get_fps())}")
         else:
-            pygame.display.set_caption(WINDOW_TITLE)
+            pygame.display.set_caption(f"{WINDOW_TITLE} - FPS: {int(clock.get_fps())}")
 
         # Calculate how many multiples of 20 the score has reached
         delay_reduction = (score // 20) * 0.05
@@ -541,7 +541,7 @@ async def main(game):
 
         # Check for collision between shadow and player
         if shadow_x == player_x and shadow_y == player_y and moved:
-            restart = show_game_over_screen(window, score, SHADOW_DELAY) # returns whether player wants to restart
+            restart = show_game_over_screen(window, score, SHADOW_DELAY, clock) # returns whether player wants to restart
             print(f"Score: {score}")
             print(f"Shadow Delay: {SHADOW_DELAY:.2f}s")
             return restart
