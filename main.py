@@ -46,7 +46,6 @@ DEATH_SFX1 = pygame.mixer.Sound(os.path.join("assets", "sounds", "dragon_growl.m
 DEATH_SFX2 = pygame.mixer.Sound(os.path.join("assets", "sounds", "monster_growl.mp3"))
 # MUSIC
 pygame.mixer.music.load(os.path.join("assets", "music", "background.mp3"))
-pygame.mixer.music.play(-1)
 # COLORS (RGB)
 WHITE = (255, 255, 255)
 BROWN = (128, 0, 0)
@@ -302,6 +301,7 @@ def show_game_over_screen(window, score, shadow_delay): # returns whether player
         DEATH_SFX1.play()
     elif rand_num == 2:
         DEATH_SFX2.play()
+    pygame.mixer.music.fadeout(1500)
     
     window.fill(BLACK)
     pygame.display.set_caption("Game Over")
@@ -337,7 +337,7 @@ def show_game_over_screen(window, score, shadow_delay): # returns whether player
                     return False
                 return True
 
-def show_pause_menu(window):
+def show_pause_menu(window, moved):
     ### Display Pause Menu
     window.fill(BLACK)
     pygame.display.set_caption("Pause Menu")
@@ -417,7 +417,7 @@ async def main(game):
 
                 if event.key == pygame.K_ESCAPE:
                     pause_start = time.time()
-                    action = show_pause_menu(window)
+                    action = show_pause_menu(window, moved)
                     pause_end = time.time()
                     pause_duration += pause_end - pause_start
                     if action == PauseMenuAction.QUIT:
@@ -440,7 +440,9 @@ async def main(game):
                 
                 # Check if the new position is valid
                 if maze_manager.get_cell(new_x, new_y) != 1:
-                    moved = True
+                    if not moved:
+                        moved = True
+                        pygame.mixer.music.play(-1)
                     # Record the movement
                     movement_history.append({
                         "position": (new_x, new_y),
