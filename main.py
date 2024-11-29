@@ -131,11 +131,11 @@ class MazeManager:
         else:
             # Generate more entry points for better connectivity
             entry_points = set(random.sample(range(1, self.width-1, 2), 
-                                          random.randint(self.minimum_paths)))
+                                          random.randint(self.minimum_paths, min(5, self.width // 2))))
         
         # Generate more exit points for better connectivity
         exit_points = set(random.sample(range(1, self.width-1, 2), 
-                                      random.randint(self.minimum_paths)))
+                                      random.randint(self.minimum_paths, min(5, self.width // 2))))
         
         # Ensure at least one exit point is near each entry point for better vertical progression
         for entry in entry_points:
