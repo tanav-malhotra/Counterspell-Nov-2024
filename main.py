@@ -1,5 +1,4 @@
 import pygame
-# from pygame.locals import *
 import numpy as np
 import os
 import sys
