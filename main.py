@@ -43,11 +43,11 @@ else:
     RESTART_BUTTON = Button(WIDTH//2, HEIGHT//2+1*(HEIGHT//6), pygame.image.load(os.path.join("assets", "buttons", "restart_button.png")), 0.5)
     QUIT_BUTTON = Button(WIDTH//2, HEIGHT//2+2*(HEIGHT//6), pygame.image.load(os.path.join("assets", "buttons", "quit_button.png")), 0.5)
 # SOUNDS
-DEATH_SFX1 = pygame.mixer.Sound(os.path.join("assets", "sounds", "dragon_growl.mp3"))
+DEATH_SFX1 = pygame.mixer.Sound(os.path.join("assets", "sounds", "monster_growl.mp3"))
 DEATH_SFX2 = pygame.mixer.Sound(os.path.join("assets", "sounds", "monster_growl.mp3"))
 PAUSE_MENU_MUSIC = pygame.mixer.Sound(os.path.join("assets", "music", "pause_menu.mp3"))
 # MUSIC
-pygame.mixer.music.load(os.path.join("assets", "music", "background.mp3"))
+pygame.mixer.music.load(os.path.join("assets", "music", "background2.mp3"))
 # COLORS (RGB)
 WHITE = (255, 255, 255)
 BROWN = (128, 0, 0)
