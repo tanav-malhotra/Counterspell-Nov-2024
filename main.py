@@ -124,18 +124,16 @@ class MazeManager:
         
         return grid
 
-    def ensure_vertical_connectivity(self, grid, section_number):
+    def ensure_vertical_connectivity(self, grid, section_number): #TODO: fix this since sometimes there is no available path
         ### Ensure vertical connectivity between sections with multiple guaranteed paths
         if section_number in self.path_memory:
             entry_points = self.path_memory[section_number]["entries"]
         else:
             # Generate more entry points for better connectivity
-            entry_points = set(random.sample(range(1, self.width-1, 2), 
-                                          random.randint(self.minimum_paths, min(5, self.width // 2))))
+            entry_points = set(random.sample(range(1, self.width-1, 2), self.minimum_paths))
         
         # Generate more exit points for better connectivity
-        exit_points = set(random.sample(range(1, self.width-1, 2), 
-                                      random.randint(self.minimum_paths, min(5, self.width // 2))))
+        exit_points = set(random.sample(range(1, self.width-1, 2), self.minimum_paths))
         
         # Ensure at least one exit point is near each entry point for better vertical progression
         for entry in entry_points:
