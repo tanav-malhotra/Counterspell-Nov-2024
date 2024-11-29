@@ -437,7 +437,7 @@ async def main(game):
                     player_x, player_y = new_x, new_y
 
         for entry in movement_history:
-            entry['time'] += pause_duration
+            entry["time"] += pause_duration
         pause_duration = 0
 
         # Update shadow position based on movement history
