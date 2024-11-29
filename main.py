@@ -11,6 +11,14 @@ from button import Button
 from enum import Enum
 import json
 
+##### FUNCTION TO ACCESS ASSETS #####
+def get_asset_path(filename):
+    if getattr(sys, "frozen", False):
+        base_path = os.path.dirname(sys.executable)
+    else:
+        base_path = os.path.dirname(__file__)
+    return os.path.join(base_path, "assets", filename)
+
 ##### Initializing the Pygame Libraries #####
 pygame.init()
 pygame.font.init()
@@ -31,9 +39,9 @@ BLACK = (0, 0, 0)
 GRAY = (142, 143, 133)
 RED = (255, 0, 0)
 # CHARACTERS
-CHARACTER_IMAGE = pygame.image.load(os.path.join("assets", "character.png"))
+CHARACTER_IMAGE = pygame.image.load(get_asset_path("character.png"))
 CHARACTER = pygame.transform.scale(CHARACTER_IMAGE, (CHARACTER_WIDTH, CHARACTER_HEIGHT))
-SHADOW_IMAGE = pygame.image.load(os.path.join("assets", "shadow.png"))
+SHADOW_IMAGE = pygame.image.load(get_asset_path("shadow.png"))
 SHADOW = pygame.transform.scale(SHADOW_IMAGE, (CHARACTER_WIDTH, CHARACTER_HEIGHT))
 SHADOW_DELAY_INIT = 1.5 # delay in seconds
 SHADOW_DELAY_INIT = max(0.5, min(3, SHADOW_DELAY_INIT))
@@ -41,19 +49,19 @@ SHADOW_DELAY = SHADOW_DELAY_INIT # delay in seconds
 # BUTTONS
 COLORED_BUTTONS = True # change to False for white-on-black buttons
 if COLORED_BUTTONS:
-    RESUME_BUTTON = Button(WIDTH//2, HEIGHT//2, pygame.image.load(os.path.join("assets", "buttons", "resume_col_button.png")), 0.5)
-    RESTART_BUTTON = Button(WIDTH//2, HEIGHT//2+1*(HEIGHT//6), pygame.image.load(os.path.join("assets", "buttons", "restart_col_button.png")), 0.5)
-    QUIT_BUTTON = Button(WIDTH//2, HEIGHT//2+2*(HEIGHT//6), pygame.image.load(os.path.join("assets", "buttons", "quit_col_button.png")), 0.5)
+    RESUME_BUTTON = Button(WIDTH//2, HEIGHT//2, pygame.image.load(get_asset_path("buttons/resume_col_button.png")), 0.5)
+    RESTART_BUTTON = Button(WIDTH//2, HEIGHT//2+1*(HEIGHT//6), pygame.image.load(get_asset_path("buttons/restart_col_button.png")), 0.5)
+    QUIT_BUTTON = Button(WIDTH//2, HEIGHT//2+2*(HEIGHT//6), pygame.image.load(get_asset_path("buttons/quit_col_button.png")), 0.5)
 else:
-    RESUME_BUTTON = Button(WIDTH//2, HEIGHT//2, pygame.image.load(os.path.join("assets", "buttons", "resume_button.png")), 0.5)
-    RESTART_BUTTON = Button(WIDTH//2, HEIGHT//2+1*(HEIGHT//6), pygame.image.load(os.path.join("assets", "buttons", "restart_button.png")), 0.5)
-    QUIT_BUTTON = Button(WIDTH//2, HEIGHT//2+2*(HEIGHT//6), pygame.image.load(os.path.join("assets", "buttons", "quit_button.png")), 0.5)
+    RESUME_BUTTON = Button(WIDTH//2, HEIGHT//2, pygame.image.load(get_asset_path("buttons/resume_button.png")), 0.5)
+    RESTART_BUTTON = Button(WIDTH//2, HEIGHT//2+1*(HEIGHT//6), pygame.image.load(get_asset_path("buttons/restart_button.png")), 0.5)
+    QUIT_BUTTON = Button(WIDTH//2, HEIGHT//2+2*(HEIGHT//6), pygame.image.load(get_asset_path("buttons/quit_button.png")), 0.5)
 # SOUNDS
-DEATH_SFX1 = pygame.mixer.Sound(os.path.join("assets", "sounds", "monster_growl.mp3"))
-DEATH_SFX2 = pygame.mixer.Sound(os.path.join("assets", "sounds", "monster_growl.mp3"))
-PAUSE_MENU_MUSIC = pygame.mixer.Sound(os.path.join("assets", "music", "pause_menu.mp3"))
+DEATH_SFX1 = pygame.mixer.Sound(get_asset_path("sounds/monster_growl.mp3"))
+DEATH_SFX2 = pygame.mixer.Sound(get_asset_path("sounds/monster_growl.mp3"))
+PAUSE_MENU_MUSIC = pygame.mixer.Sound(get_asset_path("music/pause_menu.mp3"))
 # MUSIC
-pygame.mixer.music.load(os.path.join("assets", "music", "background2.mp3"))
+pygame.mixer.music.load(get_asset_path("music/background2.mp3"))
 # FONT
 GAME_OVER_FONT = pygame.font.SysFont("times new roman", 96)
 PAUSED_FONT = pygame.font.SysFont("times new roman", 96)
