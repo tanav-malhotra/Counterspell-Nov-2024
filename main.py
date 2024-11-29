@@ -41,6 +41,10 @@ else:
     RESUME_BUTTON = Button(WIDTH//2, HEIGHT//2, pygame.image.load(os.path.join("assets", "buttons", "resume_button.png")), 0.5)
     RESTART_BUTTON = Button(WIDTH//2, HEIGHT//2+1*(HEIGHT//6), pygame.image.load(os.path.join("assets", "buttons", "restart_button.png")), 0.5)
     QUIT_BUTTON = Button(WIDTH//2, HEIGHT//2+2*(HEIGHT//6), pygame.image.load(os.path.join("assets", "buttons", "quit_button.png")), 0.5)
+# SOUNDS
+DEATH_SFX1 = pygame.mixer.Sound(os.path.join("assets", "sounds", "dragon_growl.mp3"))
+DEATH_SFX2 = pygame.mixer.Sound(os.path.join("assets", "sounds", "monster_growl.mp3"))
+#CHASE_SFX = pygame.mixer.Sound()
 # COLORS (RGB)
 WHITE = (255, 255, 255)
 BROWN = (128, 0, 0)
@@ -311,6 +315,12 @@ def show_game_over_screen(window, score, shadow_delay): # returns whether player
     
     # Update the display
     pygame.display.flip()
+
+    rand_num = random.randint(1, 2)
+    if rand_num == 1:
+        DEATH_SFX1.play()
+    elif rand_num == 2:
+        DEATH_SFX2.play()
     
     # Wait for player to quit
     waiting = True
