@@ -1,0 +1,64 @@
+# Python bytecode files
+*.pyc
+*.pyo
+*.pyd
+__pycache__/
+*.pdb
+*.so
+
+# Virtual environments
+venv/
+env/
+.venv/
+ENV/
+env.bak/
+venv.bak/
+
+# IDEs and editors
+.vscode/
+.idea/
+*.sublime-workspace
+*.sublime-project
+*.vscode/
+
+# Distribution / packaging
+build/
+dist/
+*.egg-info/
+*.egg
+*.tar.gz
+*.zip
+
+# Flask/Django specific (optional)
+instance/
+.webassets-cache
+
+# Jupyter Notebook checkpoints
+.ipynb_checkpoints/
+
+# Pytest
+.cache/
+nosetests.xml
+coverage.xml
+*.cover
+*.py,cover
+
+# MySQL & SQLite
+*.sqlite
+*.sqlite3
+
+# Log files
+*.log
+
+# Environment variables file
+.env
+.env.*
+*.env
+
+# Operating System files
+.DS_Store
+._*
+Thumbs.db
+
+# Sphinx documentation
+docs/_build/
