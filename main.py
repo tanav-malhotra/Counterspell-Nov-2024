@@ -44,6 +44,7 @@ else:
 # SOUNDS
 DEATH_SFX1 = pygame.mixer.Sound(os.path.join("assets", "sounds", "dragon_growl.mp3"))
 DEATH_SFX2 = pygame.mixer.Sound(os.path.join("assets", "sounds", "monster_growl.mp3"))
+PAUSE_MENU_MUSIC = pygame.mixer.Sound(os.path.join("assets", "music", "pause_menu.mp3"))
 # MUSIC
 pygame.mixer.music.load(os.path.join("assets", "music", "background.mp3"))
 # COLORS (RGB)
@@ -74,7 +75,7 @@ class MazeManager:
         self.highest_section = 1
         self.vertical_paths = set()
         self.path_memory = {}
-        self.minimum_paths = 3 # ensure at least 3 paths between sections
+        self.minimum_paths = 1
         self.generate_initial_sections()
     
     def get_neighbors(self, x, y, grid):
@@ -339,10 +340,15 @@ def show_game_over_screen(window, score, shadow_delay): # returns whether player
 
 def show_pause_menu(window, moved):
     ### Display Pause Menu
+    PAUSE_MENU_MUSIC.play(-1)
+    pygame.mixer.music.fadeout(1500)
+
     window.fill(BLACK)
     pygame.display.set_caption("Pause Menu")
     print("Paused...")
     
+    action = None
+
     # Wait for player to quit
     waiting = True
     while waiting:
@@ -354,26 +360,31 @@ def show_pause_menu(window, moved):
         # Render Buttons
         if RESUME_BUTTON.render(window):# fix castling chatgpt glitch and check glitch
             print("Unpaused.")
-            return PauseMenuAction.RESUME
+            action = PauseMenuAction.RESUME
         if RESTART_BUTTON.render(window):
             print("Restarting...")
-            return PauseMenuAction.RESTART
+            action = PauseMenuAction.RESTART
         if QUIT_BUTTON.render(window):
-            return PauseMenuAction.QUIT
+            action = PauseMenuAction.QUIT
     
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
-                return PauseMenuAction.QUIT
+                action = PauseMenuAction.QUIT
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_ESCAPE:
                     print("Unpaused.")
-                    return PauseMenuAction.RESUME
+                    action = PauseMenuAction.RESUME
                 if event.key in {pygame.K_DELETE, pygame.K_BACKSPACE, pygame.K_RETURN, pygame.K_KP_ENTER, pygame.K_r}:
                     print("Restarting...")
-                    return PauseMenuAction.RESTART
+                    action = PauseMenuAction.RESTART
                 if event.key == pygame.K_q:
-                    return PauseMenuAction.QUIT
+                    action = PauseMenuAction.QUIT
         
+        if action is not None:
+            if moved:
+                pygame.mixer.music.play(-1)
+            PAUSE_MENU_MUSIC.fadeout(1500)
+            return action
         # Update the display
         pygame.display.flip()
 
@@ -523,6 +534,8 @@ async def main(game):
 
         if run:
             pygame.display.flip()
+    print(f"Score: {score}")
+    print(f"Shadow Delay: {SHADOW_DELAY:.2f}s")
 
 if __name__ == "__main__":
     restart = True
