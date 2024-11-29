@@ -1,10 +1,9 @@
-import os
+##### IMPORTS #####
+import os, sys, platform
 os.environ['PYGAME_HIDE_SUPPORT_PROMPT'] = '1'
-import sys
 import pygame
 import numpy as np
-import random
-import time
+import random, time
 from collections import deque
 import asyncio
 from button import Button
@@ -57,11 +56,19 @@ else:
     RESTART_BUTTON = Button(WIDTH//2, HEIGHT//2+1*(HEIGHT//6), pygame.image.load(get_asset_path("buttons/restart_button.png")), 0.5)
     QUIT_BUTTON = Button(WIDTH//2, HEIGHT//2+2*(HEIGHT//6), pygame.image.load(get_asset_path("buttons/quit_button.png")), 0.5)
 # SOUNDS
-DEATH_SFX1 = pygame.mixer.Sound(get_asset_path("sounds/monster_growl.mp3"))
-DEATH_SFX2 = pygame.mixer.Sound(get_asset_path("sounds/monster_growl.mp3"))
-PAUSE_MENU_MUSIC = pygame.mixer.Sound(get_asset_path("music/pause_menu.mp3"))
+if sys.platform == "emscripten":
+    DEATH_SFX1 = pygame.mixer.Sound(get_asset_path("sounds/monster_growl.ogg"))
+    DEATH_SFX2 = pygame.mixer.Sound(get_asset_path("sounds/monster_growl.ogg"))
+    PAUSE_MENU_MUSIC = pygame.mixer.Sound(get_asset_path("music/pause_menu.ogg"))
+else:
+    DEATH_SFX1 = pygame.mixer.Sound(get_asset_path("sounds/monster_growl.mp3"))
+    DEATH_SFX2 = pygame.mixer.Sound(get_asset_path("sounds/monster_growl.mp3"))
+    PAUSE_MENU_MUSIC = pygame.mixer.Sound(get_asset_path("music/pause_menu.mp3"))
 # MUSIC
-pygame.mixer.music.load(get_asset_path("music/background2.mp3"))
+if sys.platform == "emscripten":
+    pygame.mixer.music.load(get_asset_path("music/background2.ogg"))
+else:
+    pygame.mixer.music.load(get_asset_path("music/background2.mp3"))
 # FONT
 GAME_OVER_FONT = pygame.font.SysFont("times new roman", 96)
 PAUSED_FONT = pygame.font.SysFont("times new roman", 96)
