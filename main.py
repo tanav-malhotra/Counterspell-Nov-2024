@@ -24,6 +24,12 @@ if WIDTH != HEIGHT:
     HEIGHT = min_size
 GRID_SIZE = 50
 CHARACTER_WIDTH, CHARACTER_HEIGHT = GRID_SIZE, GRID_SIZE
+# COLORS (RGB)
+WHITE = (255, 255, 255)
+BROWN = (128, 0, 0)
+BLACK = (0, 0, 0)
+GRAY = (142, 143, 133)
+RED = (255, 0, 0)
 # CHARACTERS
 CHARACTER_IMAGE = pygame.image.load(os.path.join("assets", "character.png"))
 CHARACTER = pygame.transform.scale(CHARACTER_IMAGE, (CHARACTER_WIDTH, CHARACTER_HEIGHT))
@@ -48,12 +54,6 @@ DEATH_SFX2 = pygame.mixer.Sound(os.path.join("assets", "sounds", "monster_growl.
 PAUSE_MENU_MUSIC = pygame.mixer.Sound(os.path.join("assets", "music", "pause_menu.mp3"))
 # MUSIC
 pygame.mixer.music.load(os.path.join("assets", "music", "background2.mp3"))
-# COLORS (RGB)
-WHITE = (255, 255, 255)
-BROWN = (128, 0, 0)
-BLACK = (0, 0, 0)
-GRAY = (142, 143, 133)
-RED = (255, 0, 0)
 # FONT
 GAME_OVER_FONT = pygame.font.SysFont("times new roman", 96)
 PAUSED_FONT = pygame.font.SysFont("times new roman", 96)
