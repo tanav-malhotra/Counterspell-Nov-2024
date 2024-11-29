@@ -62,3 +62,6 @@ Thumbs.db
 
 # Sphinx documentation
 docs/_build/
+
+# GIMP Files
+*.xcf
