@@ -75,7 +75,7 @@ class MazeManager:
         self.highest_section = 1
         self.vertical_paths = set()
         self.path_memory = {}
-        self.minimum_paths = 1
+        self.minimum_paths = 5
         self.generate_initial_sections()
     
     def get_neighbors(self, x, y, grid):
@@ -131,11 +131,11 @@ class MazeManager:
         else:
             # Generate more entry points for better connectivity
             entry_points = set(random.sample(range(1, self.width-1, 2), 
-                                          random.randint(self.minimum_paths, min(5, self.width // 2))))
+                                          random.randint(self.minimum_paths)))
         
         # Generate more exit points for better connectivity
         exit_points = set(random.sample(range(1, self.width-1, 2), 
-                                      random.randint(self.minimum_paths, min(5, self.width // 2))))
+                                      random.randint(self.minimum_paths)))
         
         # Ensure at least one exit point is near each entry point for better vertical progression
         for entry in entry_points:
