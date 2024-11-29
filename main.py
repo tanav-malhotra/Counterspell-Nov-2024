@@ -373,6 +373,7 @@ async def main(game):
     run = True
     score = 0
     SHADOW_DELAY = SHADOW_DELAY_INIT
+    pause_duration = 0
 
     # Initialize player position
     player_x, player_y = GRID_SIZE * 1, HEIGHT - CHARACTER_HEIGHT - GRID_SIZE
@@ -403,7 +404,10 @@ async def main(game):
                 new_x, new_y = player_x, player_y
 
                 if event.key == pygame.K_ESCAPE:
+                    pause_start = time.time()
                     action = show_pause_menu(window)
+                    pause_end = time.time()
+                    pause_duration += pause_end - pause_start
                     if action == PauseMenuAction.QUIT:
                         run = False
                     if action == PauseMenuAction.RESTART:
@@ -431,6 +435,10 @@ async def main(game):
                         "time": current_time
                     })
                     player_x, player_y = new_x, new_y
+
+        for entry in movement_history:
+            entry['time'] += pause_duration
+        pause_duration = 0
 
         # Update shadow position based on movement history
         while movement_history and current_time - movement_history[0]["time"] >= SHADOW_DELAY:
