@@ -295,6 +295,12 @@ class PauseMenuAction(Enum):
 
 def show_game_over_screen(window, score, shadow_delay): # returns whether player wants to restart
     ### Display the Game Over screen with the final score and shadow delay.
+    rand_num = random.randint(1, 2)
+    if rand_num == 1:
+        DEATH_SFX1.play()
+    elif rand_num == 2:
+        DEATH_SFX2.play()
+    
     window.fill(BLACK)
     pygame.display.set_caption("Game Over")
     
@@ -316,12 +322,6 @@ def show_game_over_screen(window, score, shadow_delay): # returns whether player
     # Update the display
     pygame.display.flip()
 
-    rand_num = random.randint(1, 2)
-    if rand_num == 1:
-        DEATH_SFX1.play()
-    elif rand_num == 2:
-        DEATH_SFX2.play()
-    
     # Wait for player to quit
     waiting = True
     game_over_time = pygame.time.get_ticks()
