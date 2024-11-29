@@ -44,7 +44,9 @@ else:
 # SOUNDS
 DEATH_SFX1 = pygame.mixer.Sound(os.path.join("assets", "sounds", "dragon_growl.mp3"))
 DEATH_SFX2 = pygame.mixer.Sound(os.path.join("assets", "sounds", "monster_growl.mp3"))
-#CHASE_SFX = pygame.mixer.Sound()
+# MUSIC
+pygame.mixer.music.load(os.path.join("assets", "music", "background.mp3"))
+pygame.mixer.music.play(-1)
 # COLORS (RGB)
 WHITE = (255, 255, 255)
 BROWN = (128, 0, 0)
